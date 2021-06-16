@@ -1,44 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { db } from './firebase';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunkMiddleware from 'redux-thunk'
 
-export default function App() {
+import SwitchNavigator from './navigation/SwitchNavigator'
+import reducer from './reducers'
 
-  const [treeHouseTest, setTreeHouseTest] = useState([]);
-  useEffect(() => {
-    const ref = db.collection('test');
-    ref.onSnapshot((query) => {
-        const objs = [];
-        query.forEach((doc) => {
-          objs.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
-        setTreeHouseTest(objs);
-      });
-  }, [])
+const middleware = applyMiddleware(thunkMiddleware)
+const store = createStore(reducer, middleware)
 
-  return (
-    <View style={styles.container}>
-      {treeHouseTest.map((obj) => (
-        <View id={obj.id}>
-          <Text>{obj.name}</Text>
-          <Text>{obj.butt}</Text>
-        </View>
-  ))}
-      <StatusBar style="auto" />
-    </View>
-  );
-
+export default class App extends React.Component {
+    render() {
+        return (
+          <Provider store={store}>
+            <SwitchNavigator />
+          </Provider>
+        )
+    }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
