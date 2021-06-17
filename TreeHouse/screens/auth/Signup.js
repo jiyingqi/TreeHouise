@@ -5,10 +5,6 @@ import { connect } from 'react-redux'
 import { updateEmail, updatePassword, signup } from '../../actions/user'
 
 class Signup extends React.Component {
-    handleSignUp = () => {
-        this.props.signup()
-        this.props.navigation.navigate('Profile')
-    }
 
     render() {
         return (
@@ -27,7 +23,7 @@ class Signup extends React.Component {
                     placeholder='Password'
                     secureTextEntry={true}
                 />
-                <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
+                <TouchableOpacity style={styles.button} onPress={this.props.signup}>
                     <Text style={styles.buttonText}>Signup</Text>
                 </TouchableOpacity>
             </View>
